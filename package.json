@@ -1,0 +1,19 @@
+{
+	"name": "js-common",
+	"version": "0.0.1",
+	"main": "build/index.js",
+	"types": "build/index.d.ts",
+	"dependencies": {
+		"cookie": "^0.5.0",
+		"node-fetch": "^2.6.9"
+	},
+	"scripts": {
+		"build": "tsc",
+		"install": "tsc"
+	},
+	"devDependencies": {
+		"@types/cookie": "^0.5.1",
+		"@types/node-fetch": "^2.6.2",
+		"typescript": "^4.9.5"
+	}
+}
