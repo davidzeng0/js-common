@@ -6,14 +6,12 @@
 	"dependencies": {
 		"cookie": "^0.5.0",
 		"node-fetch": "^2.6.9",
+		"typescript": "^4.9.5",
 		"@types/cookie": "^0.5.1",
 		"@types/node-fetch": "^2.6.2"
 	},
 	"scripts": {
 		"build": "tsc",
 		"install": "tsc"
-	},
-	"devDependencies": {
-		"typescript": "^4.9.5"
 	}
 }
