@@ -1,24 +1,13 @@
 import { NetworkError } from './error';
 import { URLParams } from './url';
 import { KV } from './kv';
-import fetch, { BodyInit } from 'node-fetch';
-
-export enum CommonHeader{
-	CONTENT_TYPE = 'Content-Type'
-}
-
-export enum CommonContentType{
-	JSON = 'application/json',
-	URLFORM = 'application/x-www-form-urlencoded',
-	PROTOBUF = 'application/x-protobuf',
-	OCTET_STREAM = 'application/octet-stream'
-}
+import fetch, { BodyInit, Headers } from 'node-fetch';
+import { HttpContentType, HttpHeader, HttpMethod } from './http';
 
 export interface Response{
 	status: number;
 	ok: boolean;
-	headers: KV;
-	rawHeaders: KV<string[]>;
+	headers: Headers;
 	url: string;
 	redirected: boolean;
 	body: Buffer;
@@ -31,7 +20,7 @@ export class Request{
 	body?: BodyInit;
 
 	constructor(url: string){
-		this.method = 'GET';
+		this.method = HttpMethod.GET;
 		this.url = url;
 	}
 
@@ -67,40 +56,40 @@ export class Request{
 	}
 
 	post(body: BodyInit){
-		this.method = 'POST';
+		this.method = HttpMethod.POST;
 		this.body = body;
 
 		return this;
 	}
 
 	postForm(form: string | KV | URLSearchParams){
-		this.method = 'POST';
+		this.method = HttpMethod.POST;
 		this.body = URLParams.toString(form);
-		this.setHeader(CommonHeader.CONTENT_TYPE, CommonContentType.URLFORM);
+		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.URLFORM);
 
 		return this;
 	}
 
 	postJSON(form: any){
-		this.method = 'POST';
+		this.method = HttpMethod.POST;
 		this.body = JSON.stringify(form);
-		this.setHeader(CommonHeader.CONTENT_TYPE, CommonContentType.JSON);
+		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.JSON);
 
 		return this;
 	}
 
 	postProtobuf(data: ArrayBuffer | ArrayBufferView | Buffer | string){
-		this.method = 'POST';
+		this.method = HttpMethod.POST;
 		this.body = JSON.stringify(data);
-		this.setHeader(CommonHeader.CONTENT_TYPE, CommonContentType.PROTOBUF);
+		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.PROTOBUF);
 
 		return this;
 	}
 
 	postBinary(data: ArrayBuffer | ArrayBufferView | Buffer | string){
-		this.method = 'POST';
+		this.method = HttpMethod.POST;
 		this.body = data;
-		this.setHeader(CommonHeader.CONTENT_TYPE, CommonContentType.OCTET_STREAM);
+		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.OCTET_STREAM);
 
 		return this;
 	}
@@ -130,8 +119,7 @@ export class Request{
 		return {
 			status: res.status,
 			ok: res.ok,
-			headers: KV.fromMap(res.headers as any as Map<string, string>),
-			rawHeaders: res.headers.raw() as KV<string[]>,
+			headers: res.headers,
 			url: res.url,
 			redirected: res.redirected,
 			body
