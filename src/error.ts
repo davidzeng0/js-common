@@ -1,26 +1,33 @@
-interface ErrorInfo{
+export interface ErrorInfo{
 	simpleMessage?: string;
 	error?: any;
 }
 
-export type ErrorArg = ErrorInfo | string;
-
 export class GenericError extends Error{
 	simpleMessage?: string;
 
-	constructor(arg?: ErrorArg, defaultSimpleMessge?: string){
-		if(typeof arg == 'string')
-			super(arg);
-		else{
-			var {simpleMessage, error} = arg ?? {};
+	constructor(arg?: any, defaultSimpleMessge?: string){
+		if(arg instanceof Error){
+			super(arg.message);
+			this.name = this.constructor.name;
 
-			if(error instanceof Error)
-				super(error.message);
-			else
-				super(error);
-			this.simpleMessage = simpleMessage ?? defaultSimpleMessge;
+			return;
 		}
 
+		if(typeof arg != 'object'){
+			super(arg.toString());
+			this.name = this.constructor.name;
+
+			return;
+		}
+
+		var info = arg ?? {} as ErrorInfo;
+
+		if(info.error instanceof Error)
+			super(info.error.message);
+		else
+			super(info.error);
+		this.simpleMessage = info.simpleMessage ?? defaultSimpleMessge;
 		this.name = this.constructor.name;
 	}
 
@@ -30,37 +37,49 @@ export class GenericError extends Error{
 }
 
 export class NetworkError extends GenericError{
-	constructor(arg?: ErrorArg){
+	constructor(arg?: any){
 		super(arg, 'Network error');
 	}
 }
 
-export class ClientError extends GenericError{
-	constructor(arg?: ErrorArg){
+export class HttpError extends GenericError{
+	constructor(arg?: any, defaultSimpleMessage = 'HTTP error'){
+		super(arg, defaultSimpleMessage);
+	}
+}
+
+export class ClientError extends HttpError{
+	constructor(arg?: any){
 		super(arg, 'Client error');
 	}
 }
 
-export class ServerError extends GenericError{
-	constructor(arg?: ErrorArg){
+export class ServerError extends HttpError{
+	constructor(arg?: any){
 		super(arg, 'Server error');
 	}
 }
 
+export class ApiError extends HttpError{
+	constructor(arg?: any){
+		super(arg, 'API error');
+	}
+}
+
 export class ParseError extends GenericError{
-	constructor(arg?: ErrorArg){
+	constructor(arg?: any){
 		super(arg, 'Error parsing input');
 	}
 }
 
 export class SerializeError extends GenericError{
-	constructor(arg?: ErrorArg){
+	constructor(arg?: any){
 		super(arg, 'Error serializing input');
 	}
 }
 
 export class InternalError extends GenericError{
-	constructor(arg?: ErrorArg){
+	constructor(arg?: any){
 		super(arg, 'Internal error');
 	}
 }
