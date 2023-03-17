@@ -16,7 +16,7 @@ export interface Response{
 export class Request{
 	method: string;
 	url: string;
-	headers?: KV;
+	headers?: KV<any>;
 	body?: BodyInit;
 
 	constructor(url: string){
@@ -28,14 +28,14 @@ export class Request{
 		this.method = method;
 	}
 
-	setHeader(key: string, value: string){
+	setHeader(key: string, value: any){
 		this.headers = this.headers ?? {};
 		this.headers[key] = value;
 
 		return this;
 	}
 
-	setHeaders(headers: KV | Map<string, string>){
+	setHeaders(headers: KV<any> | Map<string, any>){
 		if(!this.headers){
 			if(headers instanceof Map)
 				headers = KV.fromMap(headers);
@@ -62,7 +62,7 @@ export class Request{
 		return this;
 	}
 
-	postForm(form: string | KV | URLSearchParams){
+	postForm(form: string | KV<any> | URLSearchParams){
 		this.method = HttpMethod.POST;
 		this.body = URLParams.toString(form);
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.URLFORM);

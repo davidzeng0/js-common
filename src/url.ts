@@ -1,7 +1,7 @@
 import { KV } from './kv';
 
 export const URLParams = {
-	fromKV(kv: KV){
+	fromKV(kv: KV<any>){
 		var params = new URLSearchParams();
 
 		for(var key in kv)
@@ -19,7 +19,7 @@ export const URLParams = {
 		return kv;
 	},
 
-	toString(params: string | KV | URLSearchParams){
+	toString(params: string | KV<any> | URLSearchParams){
 		if(typeof params == 'string')
 			return params;
 		if(!(params instanceof URLSearchParams))
