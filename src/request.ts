@@ -88,7 +88,7 @@ export class Request{
 
 	postBinary(data: ArrayBuffer | ArrayBufferView | Buffer | string){
 		this.method = HttpMethod.POST;
-		this.body = data;
+		this.body = data as BodyInit;
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.OCTET_STREAM);
 
 		return this;
