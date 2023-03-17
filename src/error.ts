@@ -69,7 +69,7 @@ export class ApiError extends HttpError{
 
 export class ParseError extends GenericError{
 	constructor(arg?: any){
-		super(arg, 'Error parsing input');
+		super(arg, 'Error processing input');
 	}
 }
 
