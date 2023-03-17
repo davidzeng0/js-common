@@ -6,7 +6,7 @@ export interface ErrorInfo{
 export class GenericError extends Error{
 	simpleMessage?: string;
 
-	constructor(arg?: any, defaultSimpleMessge?: string){
+	constructor(arg?: any, defaultSimpleMessage?: string){
 		if(arg instanceof Error){
 			super(arg.message);
 			this.name = this.constructor.name;
@@ -22,12 +22,13 @@ export class GenericError extends Error{
 		}
 
 		var info = arg ?? {} as ErrorInfo;
+		var simpleMessage = info.simpleMessage ?? defaultSimpleMessage;
 
 		if(info.error instanceof Error)
 			super(info.error.message);
 		else
-			super(info.error);
-		this.simpleMessage = info.simpleMessage ?? defaultSimpleMessge;
+			super(info.error ?? simpleMessage);
+		this.simpleMessage = simpleMessage;
 		this.name = this.constructor.name;
 	}
 
@@ -43,26 +44,26 @@ export class NetworkError extends GenericError{
 }
 
 export class HttpError extends GenericError{
-	constructor(arg?: any, defaultSimpleMessage = 'HTTP error'){
+	constructor(arg?: any, defaultSimpleMessage = 'Error communicating with server'){
 		super(arg, defaultSimpleMessage);
 	}
 }
 
 export class ClientError extends HttpError{
 	constructor(arg?: any){
-		super(arg, 'Client error');
+		super(arg);
 	}
 }
 
 export class ServerError extends HttpError{
 	constructor(arg?: any){
-		super(arg, 'Server error');
+		super(arg);
 	}
 }
 
 export class ApiError extends HttpError{
 	constructor(arg?: any){
-		super(arg, 'API error');
+		super(arg);
 	}
 }
 
