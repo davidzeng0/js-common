@@ -15,7 +15,9 @@ export class GenericError extends Error{
 		}
 
 		if(typeof arg != 'object'){
-			super(arg.toString());
+			if(arg !== undefined)
+				arg = arg.toString();
+			super(arg);
 			this.name = this.constructor.name;
 
 			return;
