@@ -13,11 +13,13 @@ export interface Response{
 	body: Buffer;
 }
 
+export type Payload = BodyInit | Uint8Array;
+
 export class Request{
 	method: string;
 	url: string;
 	headers?: KV<any>;
-	body?: BodyInit;
+	body?: any;
 
 	constructor(url: string){
 		this.method = HttpMethod.GET;
@@ -55,7 +57,7 @@ export class Request{
 		return this;
 	}
 
-	post(body: BodyInit){;
+	post(body: Payload){;
 		this.method = HttpMethod.POST;
 		this.body = body;
 
@@ -78,7 +80,7 @@ export class Request{
 		return this;
 	}
 
-	postProtobuf(body: BodyInit){
+	postProtobuf(body: Payload){
 		this.method = HttpMethod.POST;
 		this.body = body;
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.PROTOBUF);
@@ -86,7 +88,7 @@ export class Request{
 		return this;
 	}
 
-	postBinary(body: BodyInit){
+	postBinary(body: Payload){
 		this.method = HttpMethod.POST;
 		this.body = body;
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.OCTET_STREAM);
