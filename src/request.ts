@@ -2,16 +2,7 @@ import { AbortedError, NetworkError } from './error';
 import { URLParams } from './url';
 import { KV } from './kv';
 import { HttpContentType, HttpHeader, HttpMethod } from './http';
-import { RequestInfo, RequestInit, BodyInit, Headers, AbortError, FetchError, Response as FetchResponse } from 'node-fetch';
-const fetchImport = import('node-fetch');
-
-var fetch = async (url: URL | RequestInfo, init?: RequestInit): Promise<FetchResponse> => {
-	var imp = await fetchImport;
-
-	fetch = imp.default as any;
-
-	return fetch(url, init);
-}
+import fetch, { BodyInit, Headers, FetchError } from 'node-fetch';
 
 export interface Response{
 	status: number;
@@ -119,7 +110,7 @@ export class Request{
 
 			body = await res.arrayBuffer();
 		}catch(e){
-			if(e instanceof AbortError)
+			if((e as any).name == 'AbortError')
 				throw new AbortedError(e);
 			if(e instanceof FetchError)
 				throw new NetworkError(e);
