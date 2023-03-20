@@ -104,3 +104,9 @@ export class UnimplementedError extends GenericError{
 		super(arg, 'Function not implemented');
 	}
 }
+
+export class UnsupportedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Function not supported');
+	}
+}
