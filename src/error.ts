@@ -98,3 +98,9 @@ export class InvalidArgumentError extends GenericError{
 		super(arg, 'Invalid argument');
 	}
 }
+
+export class UnimplementedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Function not implemented');
+	}
+}
