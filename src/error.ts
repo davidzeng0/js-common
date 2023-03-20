@@ -51,23 +51,13 @@ export class HttpError extends GenericError{
 	}
 }
 
-export class ClientError extends HttpError{
-	constructor(arg?: any){
-		super(arg);
-	}
-}
+export class ClientError extends HttpError{}
 
-export class ServerError extends HttpError{
-	constructor(arg?: any){
-		super(arg);
-	}
-}
+export class ServerError extends HttpError{}
 
-export class ApiError extends HttpError{
-	constructor(arg?: any){
-		super(arg);
-	}
-}
+export class InternalServerError extends ServerError{}
+
+export class ApiError extends HttpError{}
 
 export class ParseError extends GenericError{
 	constructor(arg?: any){
@@ -89,7 +79,7 @@ export class InternalError extends GenericError{
 
 export class NotFoundError extends GenericError{
 	constructor(arg?: any){
-		super(arg, 'Not found');
+		super(arg, 'Resource not found');
 	}
 }
 
@@ -108,5 +98,47 @@ export class UnimplementedError extends GenericError{
 export class UnsupportedError extends GenericError{
 	constructor(arg?: any){
 		super(arg, 'Function not supported');
+	}
+}
+
+export class PermissionDeniedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Permission denied');
+	}
+}
+
+export class RateLimitedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Rate limited');
+	}
+}
+
+export class UnavailableError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Resource unavailable, try again later');
+	}
+}
+
+export class TimedOutError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Operation timed out');
+	}
+}
+
+export class PreconditionFailedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Precondition failed');
+	}
+}
+
+export class AbortedError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Operation cancelled');
+	}
+}
+
+export class ExistsError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Resource exists');
 	}
 }

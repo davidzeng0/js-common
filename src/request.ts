@@ -1,11 +1,21 @@
-import { NetworkError } from './error';
+import { AbortedError, NetworkError } from './error';
 import { URLParams } from './url';
 import { KV } from './kv';
-import fetch, { BodyInit, Headers } from 'node-fetch';
 import { HttpContentType, HttpHeader, HttpMethod } from './http';
+import { RequestInfo, RequestInit, BodyInit, Headers, AbortError, FetchError, Response as FetchResponse } from 'node-fetch';
+const fetchImport = import('node-fetch');
+
+var fetch = async (url: URL | RequestInfo, init?: RequestInit): Promise<FetchResponse> => {
+	var imp = await fetchImport;
+
+	fetch = imp.default as any;
+
+	return fetch(url, init);
+}
 
 export interface Response{
 	status: number;
+	statusText: string;
 	ok: boolean;
 	headers: Headers;
 	url: string;
@@ -97,7 +107,7 @@ export class Request{
 	}
 
 	async execute(): Promise<Response>{
-		var res;
+		var res, body;
 
 		try{
 			res = await fetch(this.url, {
@@ -106,25 +116,24 @@ export class Request{
 				body: this.body,
 				compress: true
 			});
-		}catch(error){
-			throw new NetworkError({error});
-		}
 
-		var body;
-
-		try{
-			body = await res.buffer();
-		}catch(error){
-			throw new NetworkError({error});
+			body = await res.arrayBuffer();
+		}catch(e){
+			if(e instanceof AbortError)
+				throw new AbortedError(e);
+			if(e instanceof FetchError)
+				throw new NetworkError(e);
+			throw e;
 		}
 
 		return {
 			status: res.status,
+			statusText: res.statusText,
 			ok: res.ok,
 			headers: res.headers,
 			url: res.url,
 			redirected: res.redirected,
-			body
+			body: Buffer.from(body)
 		};
 	}
 }
