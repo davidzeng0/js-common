@@ -10,6 +10,7 @@ export class GenericError extends Error{
 		if(arg instanceof Error){
 			super(arg.message);
 			this.name = this.constructor.name;
+			this.simpleMessage = defaultSimpleMessage;
 
 			return;
 		}
@@ -19,6 +20,7 @@ export class GenericError extends Error{
 				arg = arg.toString();
 			super(arg);
 			this.name = this.constructor.name;
+			this.simpleMessage = defaultSimpleMessage;
 
 			return;
 		}
@@ -30,8 +32,8 @@ export class GenericError extends Error{
 			super(info.error.message);
 		else
 			super(info.error ?? simpleMessage);
-		this.simpleMessage = simpleMessage;
 		this.name = this.constructor.name;
+		this.simpleMessage = simpleMessage;
 	}
 
 	userFriendlyMessage(){
