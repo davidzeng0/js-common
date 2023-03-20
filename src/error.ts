@@ -86,3 +86,15 @@ export class InternalError extends GenericError{
 		super(arg, 'Internal error');
 	}
 }
+
+export class NotFoundError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Not found');
+	}
+}
+
+export class InvalidArgumentError extends GenericError{
+	constructor(arg?: any){
+		super(arg, 'Invalid argument');
+	}
+}
