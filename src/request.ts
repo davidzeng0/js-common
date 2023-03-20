@@ -55,7 +55,7 @@ export class Request{
 		return this;
 	}
 
-	post(body: BodyInit){
+	post(body: BodyInit){;
 		this.method = HttpMethod.POST;
 		this.body = body;
 
@@ -78,17 +78,17 @@ export class Request{
 		return this;
 	}
 
-	postProtobuf(data: ArrayBuffer | ArrayBufferView | Buffer | string){
+	postProtobuf(body: BodyInit){
 		this.method = HttpMethod.POST;
-		this.body = JSON.stringify(data);
+		this.body = body;
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.PROTOBUF);
 
 		return this;
 	}
 
-	postBinary(data: ArrayBuffer | ArrayBufferView | Buffer | string){
+	postBinary(body: BodyInit){
 		this.method = HttpMethod.POST;
-		this.body = data as BodyInit;
+		this.body = body;
 		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.OCTET_STREAM);
 
 		return this;
