@@ -18,37 +18,11 @@ export type Payload = BodyInit | Uint8Array;
 
 export class Request{
 	method: string;
-	url: string;
 	headers?: KV<any>;
-	params?: KV<any>;
 	body?: any;
 
-	constructor(url: string){
+	constructor(){
 		this.method = HttpMethod.GET;
-		this.url = url;
-	}
-
-	private setKV(name: keyof typeof this, key: string, value: any){
-		if(!this[name])
-			this[name] = KV.new<any>() as any;
-		(this[name] as KV<any>)[key] = value;
-
-		return this;
-	}
-
-	private setKVMany(name: keyof typeof this, kv: KV<any> | Map<string, any>){
-		if(!this[name]){
-			if(kv instanceof Map)
-				kv = KV.fromMap(kv);
-			this[name] = kv as any;
-		}else{
-			var values = this[name] as KV<any>;
-
-			for(var [key, value] of kv)
-				values[key] = value;
-		}
-
-		return this;
 	}
 
 	setMethod(method: string){
@@ -56,19 +30,26 @@ export class Request{
 	}
 
 	setHeader(key: string, value: any){
-		return this.setKV('headers', key, value);
+		if(!this.headers)
+			this.headers = KV.new<any>();
+		this.headers[key] = value;
+
+		return this;
 	}
 
 	setHeaders(headers: KV<any> | Map<string, any>){
-		return this.setKVMany('headers', headers);
-	}
+		if(!this.headers){
+			if(headers instanceof Map)
+				headers = KV.fromMap(headers);
+			this.headers = headers;
+		}else{
+			var values = this.headers;
 
-	setParam(key: string, value: any){
-		return this.setKV('params', key, value);
-	}
+			for(var [key, value] of headers)
+				values[key] = value;
+		}
 
-	setParams(params: KV<any> | Map<string, any>){
-		return this.setKVMany('params', params);
+		return this;
 	}
 
 	post(body: Payload, contentType?: HttpContentType){;
@@ -96,11 +77,11 @@ export class Request{
 		return this.post(body, HttpContentType.OCTET_STREAM);
 	}
 
-	async execute(): Promise<Response>{
+	async execute(url: string): Promise<Response>{
 		var res, body;
 
 		try{
-			res = await fetch(this.url, {
+			res = await fetch(url, {
 				method: this.method,
 				headers: this.headers,
 				body: this.body,

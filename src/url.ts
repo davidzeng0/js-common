@@ -27,13 +27,13 @@ export const URLParams = {
 export class URLBuilder{
 	scheme: string;
 	host?: string;
-	path: string[];
-	params?: string;
+	path_: string[];
+	params_?: KV<any>;
 	fragment?: string;
 
 	constructor(){
 		this.scheme = 'https';
-		this.path = [];
+		this.path_ = [];
 	}
 
 	setScheme(scheme: string){
@@ -49,18 +49,37 @@ export class URLBuilder{
 	}
 
 	setPath(path: string){
-		this.path = [];
+		this.path_ = [];
 		this.addPath(path);
 	}
 
 	addPath(path: string){
 		if(path.startsWith('/'))
 			path = path.substring(1);
-		this.path.push(path);
+		this.path_.push(path);
 	}
 
-	setParams(params: string | KV | URLSearchParams){
-		this.params = URLParams.toString(params);
+	setParam(key: string, value: any){
+		if(!this.params_)
+			this.params_ = KV.new<any>();
+		this.params_[key] = value;
+
+		return this;
+	}
+
+	setParams(kv: string | KV<any> | Map<string, any>){
+		if(!this.params_){
+			if(kv instanceof Map)
+				kv = KV.fromMap(kv);
+			else if(typeof kv == 'string')
+				kv = URLParams.toKV(kv);
+			this.params_ = kv;
+		}else{
+			var values = this.params_ as KV<any>;
+
+			for(var [key, value] of kv)
+				values[key] = value;
+		}
 
 		return this;
 	}
@@ -71,25 +90,29 @@ export class URLBuilder{
 		return this;
 	}
 
-	getOrigin(){
+	get origin(){
 		return `${this.scheme}://${this.host}`;
 	}
 
-	getPath(){
-		return `/${this.path.join('/')}`;
+	get path(){
+		return `/${this.path_.join('/')}`;
 	}
 
-	build(){
+	get href(){
 		var url = '';
 
 		if(this.host !== undefined)
-			url += this.getOrigin();
-		url += this.getPath();
+			url += this.origin;
+		url += this.path;
 
-		if(this.params !== undefined)
-			url += `?${this.params}`;
+		if(this.params_ !== undefined)
+			url += `?${this.params_}`;
 		if(this.fragment)
 			url += `#${this.fragment}`;
 		return url;
+	}
+
+	build(){
+		return this.href;
 	}
 }
