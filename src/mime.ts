@@ -14,7 +14,7 @@ export const Mime = {
 
 		if(type.length != 2)
 			throw new ParseError('Invalid mime type');
-		var params: KV = {};
+		var params = KV.new<string>();
 
 		for(var part of parts){
 			var param = part.trim();

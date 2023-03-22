@@ -2,17 +2,13 @@ import { KV } from './kv';
 
 export const URLParams = {
 	fromKV(kv: KV<any>){
-		var params = new URLSearchParams();
-
-		for(var key in kv)
-			params.set(key, kv[key]);
-		return params;
+		return new URLSearchParams(Object.entries(kv));
 	},
 
 	toKV(params: URLSearchParams | string){
 		if(!(params instanceof URLSearchParams))
 			params = new URLSearchParams(params);
-		var kv: KV = {};
+		var kv = KV.new<any>();
 
 		for(var [key, value] of params)
 			kv[key] = value;
@@ -31,12 +27,13 @@ export const URLParams = {
 export class URLBuilder{
 	scheme: string;
 	host?: string;
-	path?: string;
+	path: string[];
 	params?: string;
 	fragment?: string;
 
 	constructor(){
 		this.scheme = 'https';
+		this.path = [];
 	}
 
 	setScheme(scheme: string){
@@ -51,6 +48,17 @@ export class URLBuilder{
 		return this;
 	}
 
+	setPath(path: string){
+		this.path = [];
+		this.addPath(path);
+	}
+
+	addPath(path: string){
+		if(path.startsWith('/'))
+			path = path.substring(1);
+		this.path.push(path);
+	}
+
 	setParams(params: string | KV | URLSearchParams){
 		this.params = URLParams.toString(params);
 
@@ -63,15 +71,21 @@ export class URLBuilder{
 		return this;
 	}
 
+	getOrigin(){
+		return `${this.scheme}://${this.host}`;
+	}
+
+	getPath(){
+		return `/${this.path.join('/')}`;
+	}
+
 	build(){
 		var url = '';
 
 		if(this.host !== undefined)
-			url += `${this.scheme}://${this.host}`;
-		url += '/';
+			url += this.getOrigin();
+		url += this.getPath();
 
-		if(this.path)
-			url += this.path;
 		if(this.params !== undefined)
 			url += `?${this.params}`;
 		if(this.fragment)

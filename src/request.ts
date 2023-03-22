@@ -20,6 +20,7 @@ export class Request{
 	method: string;
 	url: string;
 	headers?: KV<any>;
+	params?: KV<any>;
 	body?: any;
 
 	constructor(url: string){
@@ -27,74 +28,72 @@ export class Request{
 		this.url = url;
 	}
 
+	private setKV(name: keyof typeof this, key: string, value: any){
+		if(!this[name])
+			this[name] = KV.new<any>() as any;
+		(this[name] as KV<any>)[key] = value;
+
+		return this;
+	}
+
+	private setKVMany(name: keyof typeof this, kv: KV<any> | Map<string, any>){
+		if(!this[name]){
+			if(kv instanceof Map)
+				kv = KV.fromMap(kv);
+			this[name] = kv as any;
+		}else{
+			var values = this[name] as KV<any>;
+
+			for(var [key, value] of kv)
+				values[key] = value;
+		}
+
+		return this;
+	}
+
 	setMethod(method: string){
 		this.method = method;
 	}
 
 	setHeader(key: string, value: any){
-		this.headers = this.headers ?? {};
-		this.headers[key] = value;
-
-		return this;
+		return this.setKV('headers', key, value);
 	}
 
 	setHeaders(headers: KV<any> | Map<string, any>){
-		if(!this.headers){
-			if(headers instanceof Map)
-				headers = KV.fromMap(headers);
-			this.headers = headers;
-
-			return this;
-		}
-
-		if(headers instanceof Map){
-			for(var [key, value] of headers)
-				this.headers[key] = value;
-		}else{
-			for(var key in headers)
-				this.headers[key] = headers[key];
-		}
-
-		return this;
+		return this.setKVMany('headers', headers);
 	}
 
-	post(body: Payload){;
+	setParam(key: string, value: any){
+		return this.setKV('params', key, value);
+	}
+
+	setParams(params: KV<any> | Map<string, any>){
+		return this.setKVMany('params', params);
+	}
+
+	post(body: Payload, contentType?: HttpContentType){;
 		this.method = HttpMethod.POST;
 		this.body = body;
 
+		if(contentType !== undefined)
+			this.setHeader(HttpHeader.CONTENT_TYPE, contentType);
 		return this;
 	}
 
 	postForm(form: string | KV<any> | URLSearchParams){
-		this.method = HttpMethod.POST;
-		this.body = URLParams.toString(form);
-		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.URLFORM);
-
-		return this;
+		return this.post(URLParams.toString(form), HttpContentType.URLFORM);
 	}
 
 	postJSON(form: any){
-		this.method = HttpMethod.POST;
-		this.body = JSON.stringify(form);
-		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.JSON);
-
-		return this;
+		return this.post(JSON.stringify(form), HttpContentType.JSON);
 	}
 
 	postProtobuf(body: Payload){
-		this.method = HttpMethod.POST;
-		this.body = body;
-		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.PROTOBUF);
-
-		return this;
+		return this.post(body, HttpContentType.PROTOBUF);
 	}
 
-	postBinary(body: Payload){
-		this.method = HttpMethod.POST;
-		this.body = body;
-		this.setHeader(HttpHeader.CONTENT_TYPE, HttpContentType.OCTET_STREAM);
-
-		return this;
+	postBinary(body: Payload, contentType = HttpContentType.OCTET_STREAM){
+		return this.post(body, HttpContentType.OCTET_STREAM);
 	}
 
 	async execute(): Promise<Response>{
