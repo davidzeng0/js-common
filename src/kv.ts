@@ -4,8 +4,10 @@ export interface KV<T = string>{
 }
 
 export const KV = {
-	new<T = string>(): KV<T>{
+	new<T = string>(obj?: any): KV<T>{
 		return {
+			...(obj ? {}),
+
 			[Symbol.iterator]: function(){
 				return Object.entries(this).values();
 			}
