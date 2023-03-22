@@ -4,7 +4,7 @@ export interface KV<T = string>{
 }
 
 export const KV = {
-	new<T = string>(obj?: any): KV<T>{
+	create<T = string>(obj?: any): KV<T>{
 		return {
 			...(obj ?? {}),
 
@@ -15,7 +15,7 @@ export const KV = {
 	},
 
 	fromMap<T>(map: Map<string, T>){
-		var kv = KV.new<T>();
+		var kv = KV.create<T>();
 
 		for(var [key, value] of map)
 			kv[key] = value;

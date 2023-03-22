@@ -8,7 +8,7 @@ export const URLParams = {
 	toKV(params: URLSearchParams | string){
 		if(!(params instanceof URLSearchParams))
 			params = new URLSearchParams(params);
-		var kv = KV.new<any>();
+		var kv = KV.create<any>();
 
 		for(var [key, value] of params)
 			kv[key] = value;
@@ -61,7 +61,7 @@ export class URLBuilder{
 
 	setParam(key: string, value: any){
 		if(!this.params_)
-			this.params_ = KV.new<any>();
+			this.params_ = KV.create<any>();
 		this.params_[key] = value;
 
 		return this;

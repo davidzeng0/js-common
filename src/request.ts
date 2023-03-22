@@ -31,7 +31,7 @@ export class Request{
 
 	setHeader(key: string, value: any){
 		if(!this.headers)
-			this.headers = KV.new<any>();
+			this.headers = KV.create<any>();
 		this.headers[key] = value;
 
 		return this;
