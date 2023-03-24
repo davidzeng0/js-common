@@ -1,21 +1,10 @@
 export interface KV<T = string>{
 	[key: string]: T;
-	[Symbol.iterator](): Iterator<[string, T]>;
 }
 
 export const KV = {
-	create<T = string>(obj?: any): KV<T>{
-		return {
-			...(obj ?? {}),
-
-			[Symbol.iterator]: function(){
-				return Object.entries(this).values();
-			}
-		};
-	},
-
 	fromMap<T>(map: Map<string, T>){
-		var kv = KV.create<T>();
+		var kv: KV<T> = {};
 
 		for(var [key, value] of map)
 			kv[key] = value;
@@ -25,8 +14,14 @@ export const KV = {
 	toMap<T>(kv: KV<T>){
 		var map = new Map<string, T>();
 
-		for(var [key, value] of kv)
+		for(var [key, value] of KV.entries(kv))
 			map.set(key, value);
 		return map;
+	},
+
+	entries<T>(kv: KV<T> | Map<string, T>){
+		if(kv instanceof Map)
+			return kv.entries();
+		return Object.entries(kv).values();
 	}
 };

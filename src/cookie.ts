@@ -9,7 +9,7 @@ export const Cookie = {
 	stringify(cookies: KV){
 		var parts = [];
 
-		for(var [key, value] of cookies)
+		for(var [key, value] of KV.entries(cookies))
 			parts.push(serialize(key, value));
 		return parts.join('; ');
 	}

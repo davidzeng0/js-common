@@ -8,7 +8,7 @@ export const URLParams = {
 	toKV(params: URLSearchParams | string){
 		if(!(params instanceof URLSearchParams))
 			params = new URLSearchParams(params);
-		var kv = KV.create<any>();
+		var kv: KV<any> = {};
 
 		for(var [key, value] of params)
 			kv[key] = value;
@@ -61,23 +61,23 @@ export class URLBuilder{
 
 	setParam(key: string, value: any){
 		if(!this.params_)
-			this.params_ = KV.create<any>();
+			this.params_ = {};
 		this.params_[key] = value;
 
 		return this;
 	}
 
 	setParams(kv: string | KV<any> | Map<string, any>){
+		if(typeof kv == 'string')
+			kv = URLParams.toKV(kv);
 		if(!this.params_){
 			if(kv instanceof Map)
 				kv = KV.fromMap(kv);
-			else if(typeof kv == 'string')
-				kv = URLParams.toKV(kv);
 			this.params_ = kv;
 		}else{
-			var values = this.params_ as KV<any>;
+			var values = this.params_;
 
-			for(var [key, value] of kv)
+			for(var [key, value] of KV.entries(kv))
 				values[key] = value;
 		}
 
