@@ -54,8 +54,6 @@ export class URLBuilder{
 	}
 
 	addPath(path: string){
-		if(path.startsWith('/'))
-			path = path.substring(1);
 		this.path_.push(path);
 	}
 

@@ -73,7 +73,7 @@ export class Request{
 		return this.post(body, HttpContentType.PROTOBUF);
 	}
 
-	postBinary(body: Payload, contentType = HttpContentType.OCTET_STREAM){
+	postBinary(body: Payload){
 		return this.post(body, HttpContentType.OCTET_STREAM);
 	}
 
