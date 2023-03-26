@@ -21,5 +21,6 @@ export enum HttpContentType{
 	JSON = 'application/json',
 	URLFORM = 'application/x-www-form-urlencoded',
 	PROTOBUF = 'application/x-protobuf',
-	OCTET_STREAM = 'application/octet-stream'
+	OCTET_STREAM = 'application/octet-stream',
+	TEXT = 'text/plain'
 }
