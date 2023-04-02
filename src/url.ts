@@ -104,7 +104,7 @@ export class URLBuilder{
 		url += this.path;
 
 		if(this.params_ !== undefined)
-			url += `?${this.params_}`;
+			url += `?${URLParams.fromKV(this.params_)}`;
 		if(this.fragment)
 			url += `#${this.fragment}`;
 		return url;
