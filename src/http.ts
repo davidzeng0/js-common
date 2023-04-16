@@ -14,7 +14,8 @@ export enum HttpHeader{
 	CONTENT_TYPE = 'Content-Type',
 	AUTHORIZATION = 'Authorization',
 	COOKIE = 'Cookie',
-	SET_COOKIE = 'Set-Cookie'
+	SET_COOKIE = 'Set-Cookie',
+	ORIGIN = 'Origin'
 }
 
 export enum HttpContentType{
