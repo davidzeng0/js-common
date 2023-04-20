@@ -3,7 +3,6 @@
 		"target": "esnext",
 		"module": "commonjs",
 		"outDir": "build",
-		"sourceMap": true,
 		"strict": true,
 		"allowUnreachableCode": false,
 		"noImplicitAny": true,
