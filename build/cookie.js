@@ -14,4 +14,3 @@ exports.Cookie = {
         return parts.join('; ');
     }
 };
-//# sourceMappingURL=cookie.js.map

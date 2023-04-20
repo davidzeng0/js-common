@@ -33,4 +33,3 @@ exports.Mime = {
         return a.type == b.type && a.subtype == b.subtype;
     }
 };
-//# sourceMappingURL=mime.js.map

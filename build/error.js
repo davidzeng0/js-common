@@ -140,4 +140,3 @@ class ExistsError extends GenericError {
     }
 }
 exports.ExistsError = ExistsError;
-//# sourceMappingURL=error.js.map

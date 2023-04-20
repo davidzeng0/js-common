@@ -29,4 +29,3 @@ var HttpContentType;
     HttpContentType["OCTET_STREAM"] = "application/octet-stream";
     HttpContentType["TEXT"] = "text/plain";
 })(HttpContentType = exports.HttpContentType || (exports.HttpContentType = {}));
-//# sourceMappingURL=http.js.map
