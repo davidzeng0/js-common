@@ -14,12 +14,17 @@ export declare enum HttpHeader {
     AUTHORIZATION = "Authorization",
     COOKIE = "Cookie",
     SET_COOKIE = "Set-Cookie",
-    ORIGIN = "Origin"
+    ORIGIN = "Origin",
+    USER_AGENT = "User-Agent",
+    CONTENT_LENGTH = "Content-Length",
+    DATE = "Date",
+    REFERRER = "Referer"
 }
 export declare enum HttpContentType {
     JSON = "application/json",
     URLFORM = "application/x-www-form-urlencoded",
     PROTOBUF = "application/x-protobuf",
     OCTET_STREAM = "application/octet-stream",
-    TEXT = "text/plain"
+    TEXT = "text/plain",
+    PROTOBUFFER = "application/x-protobuffer"
 }

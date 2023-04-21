@@ -20,6 +20,10 @@ var HttpHeader;
     HttpHeader["COOKIE"] = "Cookie";
     HttpHeader["SET_COOKIE"] = "Set-Cookie";
     HttpHeader["ORIGIN"] = "Origin";
+    HttpHeader["USER_AGENT"] = "User-Agent";
+    HttpHeader["CONTENT_LENGTH"] = "Content-Length";
+    HttpHeader["DATE"] = "Date";
+    HttpHeader["REFERRER"] = "Referer";
 })(HttpHeader = exports.HttpHeader || (exports.HttpHeader = {}));
 var HttpContentType;
 (function (HttpContentType) {
@@ -28,4 +32,5 @@ var HttpContentType;
     HttpContentType["PROTOBUF"] = "application/x-protobuf";
     HttpContentType["OCTET_STREAM"] = "application/octet-stream";
     HttpContentType["TEXT"] = "text/plain";
+    HttpContentType["PROTOBUFFER"] = "application/x-protobuffer";
 })(HttpContentType = exports.HttpContentType || (exports.HttpContentType = {}));
