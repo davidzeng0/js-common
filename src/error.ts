@@ -81,7 +81,7 @@ export class InternalError extends GenericError{
 
 export class NotFoundError extends GenericError{
 	constructor(arg?: any){
-		super(arg, 'Resource not found');
+		super(arg, 'Entity not found');
 	}
 }
 
@@ -141,6 +141,6 @@ export class AbortedError extends GenericError{
 
 export class ExistsError extends GenericError{
 	constructor(arg?: any){
-		super(arg, 'Resource exists');
+		super(arg, 'Entity already exists');
 	}
 }
