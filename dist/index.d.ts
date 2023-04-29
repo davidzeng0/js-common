@@ -1,0 +1,175 @@
+import { Headers, BodyInit } from 'node-fetch';
+
+interface KV<T = string> {
+    [key: string]: T;
+}
+declare const KV: {
+    fromMap<T>(map: Map<string, T>): KV<T>;
+    toMap<T_1>(kv: KV<T_1>): Map<string, T_1>;
+    entries<T_2>(kv: KV<T_2> | Map<string, T_2>): IterableIterator<[string, T_2]>;
+};
+
+declare const Cookie: {
+    parse(cookies: string): KV<string>;
+    stringify(cookies: KV): string;
+};
+
+interface ErrorInfo {
+    simpleMessage?: string;
+    error?: any;
+}
+declare class GenericError extends Error {
+    simpleMessage?: string;
+    constructor(arg?: any, defaultSimpleMessage?: string);
+    userFriendlyMessage(): string;
+}
+declare class NetworkError extends GenericError {
+    constructor(arg?: any);
+}
+declare class HttpError extends GenericError {
+    constructor(arg?: any, defaultSimpleMessage?: string);
+}
+declare class ClientError extends HttpError {
+}
+declare class ServerError extends HttpError {
+}
+declare class InternalServerError extends ServerError {
+}
+declare class ApiError extends HttpError {
+}
+declare class ParseError extends GenericError {
+    constructor(arg?: any);
+}
+declare class SerializeError extends GenericError {
+    constructor(arg?: any);
+}
+declare class InternalError extends GenericError {
+    constructor(arg?: any);
+}
+declare class NotFoundError extends GenericError {
+    constructor(arg?: any);
+}
+declare class InvalidArgumentError extends GenericError {
+    constructor(arg?: any);
+}
+declare class UnimplementedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class UnsupportedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class PermissionDeniedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class RateLimitedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class UnavailableError extends GenericError {
+    constructor(arg?: any);
+}
+declare class TimedOutError extends GenericError {
+    constructor(arg?: any);
+}
+declare class PreconditionFailedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class AbortedError extends GenericError {
+    constructor(arg?: any);
+}
+declare class ExistsError extends GenericError {
+    constructor(arg?: any);
+}
+
+interface Mime {
+    type: string;
+    subtype: string;
+    params: KV;
+}
+declare const Mime: {
+    parse(str: string): Mime;
+    typeEquals(a: string | Mime, b: string | Mime): boolean;
+};
+
+declare enum HttpMethod {
+    GET = "GET",
+    HEAD = "HEAD",
+    POST = "POST",
+    PUT = "PUT",
+    DELETE = "DELETE",
+    CONNECT = "CONNECT",
+    OPTIONS = "OPTIONS",
+    TRACE = "TRACE",
+    PATCH = "PATCH"
+}
+declare enum HttpHeader {
+    CONTENT_TYPE = "Content-Type",
+    AUTHORIZATION = "Authorization",
+    COOKIE = "Cookie",
+    SET_COOKIE = "Set-Cookie",
+    ORIGIN = "Origin",
+    USER_AGENT = "User-Agent",
+    CONTENT_LENGTH = "Content-Length",
+    DATE = "Date",
+    REFERRER = "Referer"
+}
+declare enum HttpContentType {
+    JSON = "application/json",
+    URLFORM = "application/x-www-form-urlencoded",
+    PROTOBUF = "application/x-protobuf",
+    OCTET_STREAM = "application/octet-stream",
+    TEXT = "text/plain",
+    PROTOBUFFER = "application/x-protobuffer"
+}
+
+interface Response {
+    status: number;
+    statusText: string;
+    ok: boolean;
+    headers: Headers;
+    url: string;
+    redirected: boolean;
+    body: Buffer;
+}
+type Payload = BodyInit | Uint8Array;
+declare class Request {
+    method: string;
+    headers?: KV<any>;
+    body?: any;
+    constructor();
+    setMethod(method: string): void;
+    setHeader(key: string, value: any): this;
+    setHeaders(headers: KV<any> | Map<string, any>): this;
+    post(body: Payload, contentType?: HttpContentType): this;
+    postForm(form: string | KV<any> | URLSearchParams): this;
+    postJSON(form: any): this;
+    postProtobuf(body: Payload): this;
+    postBinary(body: Payload): this;
+    execute(url: string): Promise<Response>;
+}
+
+declare const URLParams: {
+    fromKV(kv: KV<any>): URLSearchParams;
+    toKV(params: URLSearchParams | string): KV<any>;
+    toString(params: string | KV<any> | URLSearchParams): string;
+};
+declare class URLBuilder {
+    scheme: string;
+    host?: string;
+    path_: string[];
+    params_?: KV<any>;
+    fragment?: string;
+    constructor();
+    setScheme(scheme: string): this;
+    setHost(host: string): this;
+    setPath(path: string): void;
+    addPath(path: string): void;
+    setParam(key: string, value: any): this;
+    setParams(kv: string | KV<any> | Map<string, any>): this;
+    setFragment(fragment: string): this;
+    get origin(): string;
+    get path(): string;
+    get href(): string;
+    build(): string;
+}
+
+export { AbortedError, ApiError, ClientError, Cookie, ErrorInfo, ExistsError, GenericError, HttpContentType, HttpError, HttpHeader, HttpMethod, InternalError, InternalServerError, InvalidArgumentError, KV, Mime, NetworkError, NotFoundError, ParseError, Payload, PermissionDeniedError, PreconditionFailedError, RateLimitedError, Request, Response, SerializeError, ServerError, TimedOutError, URLBuilder, URLParams, UnavailableError, UnimplementedError, UnsupportedError };
