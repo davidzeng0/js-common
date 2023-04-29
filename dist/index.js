@@ -39,5 +39,3 @@ exports.URLParams = x;
 exports.UnavailableError = N;
 exports.UnimplementedError = M;
 exports.UnsupportedError = _;
-//# sourceMappingURL=out.js.map
-//# sourceMappingURL=index.js.map
