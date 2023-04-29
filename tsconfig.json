@@ -2,7 +2,6 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "commonjs",
-		"outDir": "build",
 		"strict": true,
 		"allowUnreachableCode": false,
 		"noImplicitAny": true,
@@ -13,8 +12,7 @@
 		"strictPropertyInitialization": true,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
-		"types": ["node"],
-		"declaration": true
+		"types": ["node"]
 	},
 
 	"include": [
