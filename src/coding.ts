@@ -21,7 +21,7 @@ export interface Coding{
 }
 
 export class Json{
-	static encode(data: any): SerializedType{
+	static encode(data: any): string{
 		try{
 			return JSON.stringify(data);
 		}catch(e){
@@ -39,7 +39,7 @@ export class Json{
 }
 
 export class Yaml{
-	static encode(data: any): SerializedType{
+	static encode(data: any): string{
 		try{
 			return stringify(data);
 		}catch(e){
