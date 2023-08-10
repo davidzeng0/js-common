@@ -1,3 +1,4 @@
+export * from './coding';
 export * from './cookie';
 export * from './error';
 export * from './kv';

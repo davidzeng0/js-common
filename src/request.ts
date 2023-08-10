@@ -1,7 +1,8 @@
+import { HttpContentType, HttpHeader, HttpMethod } from './http';
 import { AbortedError, NetworkError } from './error';
 import { URLParams } from './url';
+import { Json } from './coding';
 import { KV } from './kv';
-import { HttpContentType, HttpHeader, HttpMethod } from './http';
 import fetch, { BodyInit, Headers, FetchError } from 'node-fetch';
 
 export interface Response{
@@ -19,7 +20,7 @@ export type Payload = BodyInit | Uint8Array;
 export class Request{
 	method: string;
 	headers?: KV<any>;
-	body?: any;
+	body?: Payload;
 
 	constructor(){
 		this.method = HttpMethod.GET;
@@ -66,7 +67,7 @@ export class Request{
 	}
 
 	postJSON(form: any){
-		return this.post(JSON.stringify(form), HttpContentType.JSON);
+		return this.post(Json.encode(form), HttpContentType.JSON);
 	}
 
 	postProtobuf(body: Payload){
