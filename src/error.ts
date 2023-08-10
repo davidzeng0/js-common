@@ -25,8 +25,8 @@ export class GenericError extends Error{
 			return;
 		}
 
-		var info = arg ?? {} as ErrorInfo;
-		var simpleMessage = info.simpleMessage ?? defaultSimpleMessage;
+		let info = arg ?? {} as ErrorInfo;
+		let simpleMessage = info.simpleMessage ?? defaultSimpleMessage;
 
 		if(info.error instanceof Error)
 			super(info.error.message);

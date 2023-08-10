@@ -8,9 +8,9 @@ export const URLParams = {
 	toKV(params: URLSearchParams | string){
 		if(!(params instanceof URLSearchParams))
 			params = new URLSearchParams(params);
-		var kv: KV<any> = {};
+		let kv: KV<any> = {};
 
-		for(var [key, value] of params)
+		for(let [key, value] of params)
 			kv[key] = value;
 		return kv;
 	},
@@ -73,9 +73,9 @@ export class URLBuilder{
 				kv = KV.fromMap(kv);
 			this.params_ = kv;
 		}else{
-			var values = this.params_;
+			let values = this.params_;
 
-			for(var [key, value] of KV.entries(kv))
+			for(let [key, value] of KV.entries(kv))
 				values[key] = value;
 		}
 
@@ -97,7 +97,7 @@ export class URLBuilder{
 	}
 
 	get href(){
-		var url = '';
+		let url = '';
 
 		if(this.host !== undefined)
 			url += this.origin;

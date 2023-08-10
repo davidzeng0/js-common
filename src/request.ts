@@ -44,9 +44,9 @@ export class Request{
 				headers = KV.fromMap(headers);
 			this.headers = headers;
 		}else{
-			var values = this.headers;
+			let values = this.headers;
 
-			for(var [key, value] of KV.entries(headers))
+			for(let [key, value] of KV.entries(headers))
 				values[key] = value;
 		}
 
@@ -79,7 +79,7 @@ export class Request{
 	}
 
 	async execute(url: string): Promise<Response>{
-		var res, body;
+		let res, body;
 
 		try{
 			res = await fetch(url, {

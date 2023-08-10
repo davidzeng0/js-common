@@ -9,20 +9,20 @@ export interface Mime{
 
 export const Mime = {
 	parse(str: string): Mime{
-		var parts = str.split(';');
-		var type = parts.shift()!.trim().split('/');
+		let parts = str.split(';');
+		let type = parts.shift()!.trim().split('/');
 
 		if(type.length != 2)
 			throw new ParseError('Invalid mime type');
-		var params: KV<string> = {};
+		let params: KV<string> = {};
 
-		for(var part of parts){
-			var param = part.trim();
-			var index = param.indexOf('=');
+		for(let part of parts){
+			let param = part.trim();
+			let index = param.indexOf('=');
 
 			if(index == -1)
 				throw new ParseError('Invalid mime type');
-			var key = param.substring(0, index), value = param.substring(index + 1);
+			let key = param.substring(0, index), value = param.substring(index + 1);
 
 			if(value.charAt(0) === '"' && value.charAt(value.length - 1) === '"')
 				value = value.substring(1, value.length - 1);

@@ -4,17 +4,17 @@ export interface KV<T = string>{
 
 export const KV = {
 	fromMap<T>(map: Map<string, T>){
-		var kv: KV<T> = {};
+		let kv: KV<T> = {};
 
-		for(var [key, value] of map)
+		for(let [key, value] of map)
 			kv[key] = value;
 		return kv;
 	},
 
 	toMap<T>(kv: KV<T>){
-		var map = new Map<string, T>();
+		let map = new Map<string, T>();
 
-		for(var [key, value] of KV.entries(kv))
+		for(let [key, value] of KV.entries(kv))
 			map.set(key, value);
 		return map;
 	},
