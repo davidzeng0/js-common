@@ -3,35 +3,50 @@ export interface ErrorInfo{
 	error?: any;
 }
 
+function parseErrorArg(arg?: any, defaultSimpleMessage?: string){
+	if(typeof arg != 'object'){
+		if(arg !== undefined)
+			arg = arg.toString();
+		return {
+			message: arg,
+			simpleMessage: defaultSimpleMessage
+		};
+	}
+
+	if(arg instanceof Error){
+		return {
+			message: arg.message,
+			simpleMessage: (arg as any).simpleMessage ?? defaultSimpleMessage
+		}
+	}
+
+	let info = arg as ErrorInfo | undefined;
+	let message, simpleMessage = info?.simpleMessage;
+
+	if(info?.error instanceof Error){
+		message = info.error.message;
+
+		if(!simpleMessage)
+			simpleMessage = (info.error as any).simpleMessage;
+	}else{
+		message = info?.error ?? simpleMessage;
+	}
+
+	if(!simpleMessage)
+		simpleMessage = defaultSimpleMessage;
+	return {
+		message: message ?? simpleMessage,
+		simpleMessage
+	}
+}
+
 export class GenericError extends Error{
 	simpleMessage?: string;
 
 	constructor(arg?: any, defaultSimpleMessage?: string){
-		if(arg instanceof Error){
-			super(arg.message);
-			this.name = this.constructor.name;
-			this.simpleMessage = defaultSimpleMessage;
+		let {message, simpleMessage} = parseErrorArg(arg, defaultSimpleMessage);
 
-			return;
-		}
-
-		if(typeof arg != 'object'){
-			if(arg !== undefined)
-				arg = arg.toString();
-			super(arg);
-			this.name = this.constructor.name;
-			this.simpleMessage = defaultSimpleMessage;
-
-			return;
-		}
-
-		let info = arg ?? {} as ErrorInfo;
-		let simpleMessage = info.simpleMessage ?? defaultSimpleMessage;
-
-		if(info.error instanceof Error)
-			super(info.error.message);
-		else
-			super(info.error ?? simpleMessage);
+		super(message);
 		this.name = this.constructor.name;
 		this.simpleMessage = simpleMessage;
 	}
