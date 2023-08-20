@@ -31,9 +31,22 @@ export class URLBuilder{
 	params_?: KV<any>;
 	fragment?: string;
 
-	constructor(){
+	constructor(url?: string){
 		this.scheme = 'https';
 		this.path_ = [];
+
+		if(!url)
+			return;
+		let parsed = new URL(url);
+
+		this.scheme = parsed.protocol.substring(0, parsed.protocol.length - 1);
+
+		if(parsed.host !== '')
+			this.host = parsed.host;
+		this.path_ = [parsed.pathname];
+
+		for(let [key, value] of parsed.searchParams)
+			this.setParam(key, value);
 	}
 
 	setScheme(scheme: string){
