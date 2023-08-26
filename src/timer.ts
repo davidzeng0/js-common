@@ -3,7 +3,7 @@ export class Timer{
 	repeat?: number;
 	callback?: Function;
 	callbackArgs?: any[];
-	timer?: NodeJS.Timer;
+	timer?: NodeJS.Timeout;
 	expire?: number;
 
 	inCallback = false;
