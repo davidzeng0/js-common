@@ -43,7 +43,7 @@ export class URLBuilder{
 
 		if(parsed.host !== '')
 			this.host = parsed.host;
-		this.path_ = [parsed.pathname];
+		this.path_ = [parsed.pathname.substring(1)];
 
 		for(let [key, value] of parsed.searchParams)
 			this.setParam(key, value);
