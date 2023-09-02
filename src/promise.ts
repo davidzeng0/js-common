@@ -45,7 +45,7 @@ export class ConcurrentPromise<T>{
 	run(){
 		this.taskOnce();
 
-		return this.promise;
+		return this.promise!;
 	}
 
 	clear(){
