@@ -25,8 +25,12 @@ export class ConcurrentPromise<T>{
 	}
 
 	private async taskOnce(){
-		if(this.promise)
+		if(this.promise){
+			if(this.options?.queueRun)
+				this.queued = true;
 			return;
+		}
+
 		do{
 			this.queued = false;
 			this.promise = this.task();
