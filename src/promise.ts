@@ -10,31 +10,45 @@ export class Promises{
 
 export class ConcurrentPromise<T>{
 	task;
-	abortOnFail;
+	options;
 
 	promise?: Promise<T>;
 	error?: any;
+	queued = false;
 
-	constructor(task: () => Promise<T>, abortOnFail = false){
+	constructor(task: () => Promise<T>, options?: {
+		abortOnFail?: true;
+		queueRun?: true;
+	}){
 		this.task = task;
-		this.abortOnFail = abortOnFail;
+		this.options = options;
+	}
+
+	private async taskOnce(){
+		if(this.promise)
+			return;
+		do{
+			this.queued = false;
+			this.promise = this.task();
+
+			try{
+				await this.promise;
+			}catch(e){
+				if(this.options?.abortOnFail)
+					return;
+			}
+
+			this.promise = undefined;
+		}while(this.queued);
 	}
 
 	run(){
-		if(this.error)
-			throw this.error;
-		if(!this.promise){
-			this.promise = this.task();
-
-			if(this.abortOnFail)
-				this.promise.catch((e) => this.error = e);
-			this.promise.finally(() => this.promise = undefined);
-		}
+		this.taskOnce();
 
 		return this.promise;
 	}
 
 	clear(){
-		this.error = undefined;
+		this.promise = undefined;
 	}
 }
