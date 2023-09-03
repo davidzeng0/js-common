@@ -159,3 +159,11 @@ export class ExistsError extends GenericError{
 		super(arg, 'Entity already exists');
 	}
 }
+
+export class Errors{
+	static toString(e: unknown){
+		if(e instanceof Error)
+			return e.stack ?? e.message;
+		return `${e}`;
+	}
+}
