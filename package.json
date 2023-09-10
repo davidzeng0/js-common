@@ -10,11 +10,16 @@
 		"yaml": "^2.3.1"
 	},
 	"devDependencies": {
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^9.0.5",
+		"@semantic-release/npm": "^10.0.5",
 		"@types/cookie": "^0.5.1",
 		"@types/js-yaml": "^4.0.5",
 		"@types/node": "^18.15.3",
 		"@types/node-fetch": "^2.6.4",
 		"git-publish": "^2.0.0",
+		"semantic-release": "^21.1.1",
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6"
 	},
