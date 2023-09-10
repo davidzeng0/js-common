@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "commonjs",
+		"strict": true,
+		"allowUnreachableCode": false,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"types": ["node"]
+	},
+
+	"include": [
+		"src"
+	]
+}
