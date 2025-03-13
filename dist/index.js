@@ -1,0 +1,50 @@
+'use strict';
+
+var types = require('util/types');
+var yaml = require('yaml');
+var jsYaml = require('js-yaml');
+var cookie = require('cookie');
+var H = require('node-fetch');
+
+function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
+
+var H__default = /*#__PURE__*/_interopDefault(H);
+
+var $=Object.defineProperty;var s=(t,e)=>$(t,"name",{value:e,configurable:true});function G(t,e){if(typeof t!="object")return t!==void 0&&(t=t.toString()),{message:t,simpleMessage:e};if(t instanceof Error)return {message:t.message,simpleMessage:t.simpleMessage??e};let r=t,i,n=r?.simpleMessage;return r?.error instanceof Error?(i=r.error.message,n||(n=r.error.simpleMessage)):i=r?.error??n,n||(n=e),{message:i??n,simpleMessage:n}}s(G,"parseErrorArg");var o=class extends Error{static{s(this,"GenericError");}simpleMessage;constructor(e,r){let{message:i,simpleMessage:n}=G(e,r);super(i),this.name=this.constructor.name,this.simpleMessage=n;}userFriendlyMessage(){return this.simpleMessage??"Unknown error"}},m=class extends o{static{s(this,"NetworkError");}constructor(e){super(e,"Network error");}},f=class extends o{static{s(this,"HttpError");}constructor(e,r="Error communicating with server"){super(e,r);}},O=class extends f{static{s(this,"ClientError");}},T=class extends f{static{s(this,"ServerError");}},b=class extends T{static{s(this,"InternalServerError");}},P=class extends f{static{s(this,"ApiError");}},c=class extends o{static{s(this,"ParseError");}constructor(e){super(e,"Error processing input");}},l=class extends o{static{s(this,"SerializeError");}constructor(e){super(e,"Error serializing input");}},w=class extends o{static{s(this,"InternalError");}constructor(e){super(e,"Internal error");}},R=class extends o{static{s(this,"NotFoundError");}constructor(e){super(e,"Entity not found");}},S=class extends o{static{s(this,"InvalidArgumentError");}constructor(e){super(e,"Invalid argument");}},E=class extends o{static{s(this,"UnimplementedError");}constructor(e){super(e,"Function not implemented");}},k=class extends o{static{s(this,"UnsupportedError");}constructor(e){super(e,"Function not supported");}},A=class extends o{static{s(this,"PermissionDeniedError");}constructor(e){super(e,"Permission denied");}},K=class extends o{static{s(this,"RateLimitedError");}constructor(e){super(e,"Rate limited");}},V=class extends o{static{s(this,"UnavailableError");}constructor(e){super(e,"Resource unavailable, try again later");}},M=class extends o{static{s(this,"TimedOutError");}constructor(e){super(e,"Operation timed out");}},_=class extends o{static{s(this,"PreconditionFailedError");}constructor(e){super(e,"Precondition failed");}},d=class extends o{static{s(this,"AbortedError");}constructor(e){super(e,"Operation cancelled");}},N=class extends o{static{s(this,"ExistsError");}constructor(e){super(e,"Entity already exists");}},C=class{static{s(this,"Errors");}static toString(e){return e instanceof Error?e.stack??e.message:`${e}`}};function B(t,e="utf8"){return typeof t=="string"?t:(t instanceof ArrayBuffer?t=Buffer.from(t):types.isArrayBufferView(t)&&(t=Buffer.from(t.buffer)),t.toString(e))}s(B,"bufferToString");var y=class{static{s(this,"Json");}static encode(e){try{return JSON.stringify(e)}catch(r){throw new l(r)}}static decode(e){try{return JSON.parse(B(e))}catch(r){throw new c(r)}}},U=class{static{s(this,"Yaml");}static encode(e){try{return yaml.stringify(e)}catch(r){throw new l(r)}}static decode(e){try{return jsYaml.load(B(e))}catch(r){throw new c(r)}}};var p={fromMap(t){let e={};for(let[r,i]of t)e[r]=i;return e},toMap(t){let e=new Map;for(let[r,i]of p.entries(t))e.set(r,i);return e},entries(t){return t instanceof Map?t.entries():Object.entries(t).values()}};var le={parse(t){return cookie.parse(t)},stringify(t){let e=[];for(let[r,i]of p.entries(t))e.push(cookie.serialize(r,i));return e.join("; ")}};var v=(a=>(a.GET="GET",a.HEAD="HEAD",a.POST="POST",a.PUT="PUT",a.DELETE="DELETE",a.CONNECT="CONNECT",a.OPTIONS="OPTIONS",a.TRACE="TRACE",a.PATCH="PATCH",a))(v||{}),F=(a=>(a.CONTENT_TYPE="Content-Type",a.AUTHORIZATION="Authorization",a.COOKIE="Cookie",a.SET_COOKIE="Set-Cookie",a.ORIGIN="Origin",a.USER_AGENT="User-Agent",a.CONTENT_LENGTH="Content-Length",a.DATE="Date",a.REFERRER="Referer",a))(F||{}),L=(u=>(u.JSON="application/json",u.URLFORM="application/x-www-form-urlencoded",u.PROTOBUF="application/x-protobuf",u.OCTET_STREAM="application/octet-stream",u.TEXT="text/plain",u.PROTOBUFFER="application/x-protobuffer",u))(L||{});var ge={parse(t){let e=t.split(";"),r=e.shift().trim().split("/");if(r.length!=2)throw new c("Invalid mime type");let i={};for(let n of e){let x=n.trim(),u=x.indexOf("=");if(u==-1)throw new c("Invalid mime type");let J=x.substring(0,u),h=x.substring(u+1);h.charAt(0)==='"'&&h.charAt(h.length-1)==='"'&&(h=h.substring(1,h.length-1)),i[J]=h;}return {type:r[0],subtype:r[1],params:i}},typeEquals(t,e){return typeof t=="string"&&(t=this.parse(t)),typeof e=="string"&&(e=this.parse(e)),t.type==e.type&&t.subtype==e.subtype}};var I=class{static{s(this,"Promises");}static resolveAfter(e){return new Promise(r=>setTimeout(r,e))}static rejectAfter(e){return new Promise((r,i)=>setTimeout(i,e))}},z=class{static{s(this,"ConcurrentPromise");}task;options;promise;error;queued=false;constructor(e,r){this.task=e,this.options=r;}async taskOnce(){if(this.promise){this.options?.queueRun&&(this.queued=true);return}do{this.queued=false,this.promise=this.task();try{await this.promise;}catch{if(this.options?.abortOnFail)return}this.promise=void 0;}while(this.queued)}run(){return this.taskOnce(),this.promise}clear(){this.promise=void 0;}};var g={fromKV(t){return new URLSearchParams(Object.entries(t))},toKV(t){t instanceof URLSearchParams||(t=new URLSearchParams(t));let e={};for(let[r,i]of t)e[r]=i;return e},toString(t){return typeof t=="string"?t:(t instanceof URLSearchParams||(t=this.fromKV(t)),t.toString())}},j=class{static{s(this,"URLBuilder");}scheme;host;path_;params_;fragment;constructor(e){if(this.scheme="https",this.path_=[],!e)return;let r=new URL(e);this.scheme=r.protocol.substring(0,r.protocol.length-1),r.host!==""&&(this.host=r.host),this.path_=[r.pathname.substring(1)];for(let[i,n]of r.searchParams)this.setParam(i,n);}setScheme(e){return this.scheme=e,this}setHost(e){return this.host=e,this}setPath(e){this.path_=[],this.addPath(e);}addPath(e){this.path_.push(e);}setParam(e,r){return this.params_||(this.params_={}),this.params_[e]=r,this}setParams(e){if(typeof e=="string"&&(e=g.toKV(e)),!this.params_)e instanceof Map&&(e=p.fromMap(e)),this.params_=e;else {let r=this.params_;for(let[i,n]of p.entries(e))r[i]=n;}return this}setFragment(e){return this.fragment=e,this}get origin(){return `${this.scheme}://${this.host}`}get path(){return `/${this.path_.join("/")}`}get href(){let e="";return this.host!==void 0&&(e+=this.origin),e+=this.path,this.params_!==void 0&&(e+=`?${g.fromKV(this.params_)}`),this.fragment&&(e+=`#${this.fragment}`),e}build(){return this.href}};var q=class{static{s(this,"Request");}method;headers;body;agent;constructor(){this.method="GET";}setMethod(e){this.method=e;}setHeader(e,r){return this.headers||(this.headers={}),this.headers[e]=r,this}setHeaders(e){if(!this.headers)e instanceof Map&&(e=p.fromMap(e)),this.headers=e;else {let r=this.headers;for(let[i,n]of p.entries(e))r[i]=n;}return this}setAgent(e){this.agent=e;}post(e,r){return this.method="POST",this.body=e,r!==void 0&&this.setHeader("Content-Type",r),this}postForm(e){return this.post(g.toString(e),"application/x-www-form-urlencoded")}postJSON(e){return this.post(y.encode(e),"application/json")}postProtobuf(e){return this.post(e,"application/x-protobuf")}postBinary(e){return this.post(e,"application/octet-stream")}async execute(e){let r,i;try{r=await H__default.default(e,{method:this.method,headers:this.headers,body:this.body,agent:this.agent,compress:!0}),i=await r.arrayBuffer();}catch(n){throw n.name=="AbortError"?new d(n):n instanceof H.FetchError?new m(n):n}return {status:r.status,statusText:r.statusText,ok:r.ok,headers:r.headers,url:r.url,redirected:r.redirected,body:Buffer.from(i)}}};var D=class{static{s(this,"Timer");}initial;repeat;callback;callbackArgs;timer;expire;inCallback=false;isRepeat=false;constructor(e,r,i){this.initial=e.initialTimeout,this.repeat=e.repeatTimeout,this.callback=r,this.callbackArgs=i instanceof Array?i:[i],e.start&&this.start();}invokeCallback(){if(this.expire=void 0,!!this.callback){this.inCallback=true;try{this.callbackArgs?this.callback(...this.callbackArgs):this.callback();}finally{this.inCallback=false;}}}internalStart(){let e=this.initial??this.repeat;if(this.isRepeat){if(this.repeat===void 0)return;e=this.repeat;}e!==void 0&&(this.expire=Date.now()+e,this.timer=setTimeout(()=>{this.invokeCallback(),this.timer!==void 0&&(this.isRepeat=true,this.stop(),this.internalStart());},e));}start(e,r){r!==void 0&&(this.repeat=e),e!==void 0&&(r!==void 0?this.initial=e:this.repeat!==void 0&&this.initial===void 0?this.repeat=e:this.initial=e),this.isRepeat=false,!this.inCallback&&(this.stop(),this.internalStart());}stop(){this.active&&(clearTimeout(this.timer),this.timer=void 0,this.expire=void 0);}get active(){return this.timer!==void 0}};
+
+exports.AbortedError = d;
+exports.ApiError = P;
+exports.ClientError = O;
+exports.ConcurrentPromise = z;
+exports.Cookie = le;
+exports.Errors = C;
+exports.ExistsError = N;
+exports.GenericError = o;
+exports.HttpContentType = L;
+exports.HttpError = f;
+exports.HttpHeader = F;
+exports.HttpMethod = v;
+exports.InternalError = w;
+exports.InternalServerError = b;
+exports.InvalidArgumentError = S;
+exports.Json = y;
+exports.KV = p;
+exports.Mime = ge;
+exports.NetworkError = m;
+exports.NotFoundError = R;
+exports.ParseError = c;
+exports.PermissionDeniedError = A;
+exports.PreconditionFailedError = _;
+exports.Promises = I;
+exports.RateLimitedError = K;
+exports.Request = q;
+exports.SerializeError = l;
+exports.ServerError = T;
+exports.TimedOutError = M;
+exports.Timer = D;
+exports.URLBuilder = j;
+exports.URLParams = g;
+exports.UnavailableError = V;
+exports.UnimplementedError = E;
+exports.UnsupportedError = k;
+exports.Yaml = U;
